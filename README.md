@@ -14,7 +14,7 @@ This project is an challenge for job as software engineer at bank Itau. I'm need
 - [x] Unit test
 - [x] Integration test
 
-## For run requirements
+## Requirements for run
 * install go (only for run tests)
 * install docker
 
