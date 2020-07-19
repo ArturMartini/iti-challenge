@@ -113,6 +113,33 @@ func (suite *integrationPasswordTest) TestIntegrationPasswordValidate() {
 	validateTest(suite, testCases)
 }
 
+func (suite *integrationPasswordTest) TestFromJsonMethodUnmarshalError() {
+	w := new(mockResponseWriter)
+	r := &http.Request{
+		Body: ioutil.NopCloser(strings.NewReader("")),
+	}
+	err := fromJson(w, r, nil)
+	assert.Equal(suite.T(), "unexpected end of JSON input", err.Error())
+	assert.Equal(suite.T(), http.StatusBadRequest, w.code)
+}
+
+func (suite *integrationPasswordTest) TestFromJsonMethodRequestError() {
+	w := new(mockResponseWriter)
+	r := httptest.NewRequest(http.MethodPost, "/something", errReader(0))
+	err := fromJson(w, r, nil)
+	assert.Equal(suite.T(), "test error", err.Error())
+	assert.Equal(suite.T(), http.StatusBadRequest, w.code)
+}
+
+func (suite *integrationPasswordTest) TestHandleResponse() {
+	w := new(mockResponseWriter)
+	handleResponse(entities.Response{Valid: true}, w)
+	assert.Equal(suite.T(), http.StatusOK, w.code)
+
+	handleResponse(make(chan int), w)
+	assert.Equal(suite.T(), http.StatusInternalServerError, w.code)
+}
+
 func request(client http.Client, url, method string, value interface{}) (*http.Response, error) {
 	bytes, err := json.Marshal(value)
 	if err != nil {
@@ -148,27 +175,8 @@ func response(response *http.Response, err error) (entities.Response, error) {
 
 func validateTest(suite *integrationPasswordTest, testCases []testCase) {
 	for _, c := range testCases {
-		resp, err := response(request(suite.client, suite.server.URL + c.Uri, c.Method, entities.Password{Value: c.Value}))
+		resp, err := response(request(suite.client, suite.server.URL+c.Uri, c.Method, entities.Password{Value: c.Value}))
 		assert.Nil(suite.T(), err)
 		assert.Equal(suite.T(), c.ExpectedValue, resp.Valid)
 	}
 }
-
-func TestFromJsonMethodUnmarshalError(t *testing.T) {
-	w := new(mockResponseWriter)
-	r := &http.Request{
-		Body: ioutil.NopCloser(strings.NewReader("")),
-	}
-	err := fromJson(w, r, nil)
-	assert.Equal(t, "unexpected end of JSON input", err.Error())
-	assert.Equal(t, http.StatusBadRequest, w.code)
-}
-
-func TestFromJsonMethodRequestError(t *testing.T) {
-	w := new(mockResponseWriter)
-	r := httptest.NewRequest(http.MethodPost, "/something", errReader(0))
-	err := fromJson(w, r, nil)
-	assert.Equal(t, "test error", err.Error())
-	assert.Equal(t, http.StatusBadRequest, w.code)
-}
-

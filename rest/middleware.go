@@ -56,7 +56,8 @@ func validatePassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	handleResponse(svc.ValidateStrongPassword(password), w)
+	valid := svc.ValidateStrongPassword(password)
+	handleResponse(entities.Response{Valid: valid}, w)
 }
 
 func fromJson(w http.ResponseWriter, r *http.Request, value interface{}) error {
@@ -76,11 +77,12 @@ func fromJson(w http.ResponseWriter, r *http.Request, value interface{}) error {
 	return err
 }
 
-func handleResponse(valid bool, w http.ResponseWriter) {
-	bytes, err := json.Marshal(entities.Response{Valid: valid})
+func handleResponse(value interface{}, w http.ResponseWriter) {
+	bytes, err := json.Marshal(value)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Unexpected error"))
+		return
 	}
 
 	w.Write(bytes)

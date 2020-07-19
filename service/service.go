@@ -17,24 +17,24 @@ type service struct{}
 type ValidateType func(string) bool
 
 const (
-	patternNotHaveSpace    = "^\\S*$"
-	patternHaveOneDigit    = ".*\\d"
-	patternMinCharacter    = ".*.{8,}"
-	patternHaveLowerChar   = ".*[a-z]"
-	patternHaveUpperChar   = ".*[A-Z]"
-	patternHaveSpecialChar = ".*[!@#$%^&*()\\-+]"
+	regexNotHaveSpace    = "^\\S*$"
+	regexHaveOneDigit    = ".*\\d"
+	regexMinCharacter    = ".*.{9,}"
+	regexHaveLowerChar   = ".*[a-z]"
+	regexHaveUpperChar   = ".*[A-Z]"
+	regexHaveSpecialChar = ".*[!@#$%^&*()\\-+]"
 )
 
 var (
 	once            sync.Once
 	instance        Service
 	regexValidation = []interface{}{
-		regexp.MustCompile(patternNotHaveSpace),
-		regexp.MustCompile(patternHaveOneDigit),
-		regexp.MustCompile(patternMinCharacter),
-		regexp.MustCompile(patternHaveLowerChar),
-		regexp.MustCompile(patternHaveUpperChar),
-		regexp.MustCompile(patternHaveSpecialChar),
+		regexp.MustCompile(regexNotHaveSpace),
+		regexp.MustCompile(regexHaveOneDigit),
+		regexp.MustCompile(regexMinCharacter),
+		regexp.MustCompile(regexHaveLowerChar),
+		regexp.MustCompile(regexHaveUpperChar),
+		regexp.MustCompile(regexHaveSpecialChar),
 		isNotRepeated,
 	}
 )
