@@ -1,9 +1,9 @@
 package entities
 
 type Password struct {
-	Value string
+	Value string `json:"value"`
 }
 
 type Response struct {
-	Valid bool
+	Valid bool `json:"valid"`
 }
