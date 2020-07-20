@@ -38,8 +38,6 @@ This project is an challenge for job as software engineer at bank Itau. I'm need
 
 ## Error Responses
 
-**Condition** : if send unmarshal json
-
 **Code** : `400 BAD REQUEST`
 
 **Code** : `500 INTERNAL SERVER ERROR`
