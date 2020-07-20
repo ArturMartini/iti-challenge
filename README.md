@@ -32,7 +32,7 @@ This project is an challenge for job as software engineer at bank Itau. I'm need
 
 ```json
 {
-    "valid": boolean,
+    "valid": false,
 }
 ```
 
