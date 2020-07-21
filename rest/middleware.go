@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-type Endpoint struct {
+type endpoint struct {
 	Path   string
 	Func   func(w http.ResponseWriter, r *http.Request)
 	Method string
@@ -21,7 +21,7 @@ const uri = "/v1/api/password-validate"
 var (
 	svc       service.Service
 	router    = mux.NewRouter()
-	endpoints = []Endpoint{
+	endpoints = []endpoint{
 		{
 			Path:   uri,
 			Func:   validatePassword,
