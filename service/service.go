@@ -14,7 +14,6 @@ type Service interface {
 }
 
 type service struct{}
-type ValidateType func(string) bool
 
 const (
 	regexNotHaveSpace    = "^\\S*$"
